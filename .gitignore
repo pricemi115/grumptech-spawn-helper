@@ -1,0 +1,14 @@
+# Operating system files
+.DS_Store
+
+# Local Deployment images
+grumptech-spawn-helper-*.tgz
+
+# Dependency directories
+node_modules/
+/debug
+
+#VSCode Environment
+.vscode
+*.code-workspace
+
