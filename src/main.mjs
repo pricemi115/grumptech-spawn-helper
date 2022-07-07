@@ -19,6 +19,7 @@
 import EventEmitter from 'events';
 import _debugModule from 'debug';
 import {spawn as _spawn} from 'child_process';
+import { Buffer as _buffer} from 'buffer';
 import {default as _is} from 'is';
 
 // Internal imports.
@@ -383,6 +384,28 @@ class SpawnHelper extends EventEmitter {
     _process_error(error) {
         // Log the error info.
         _debug(`Child Process for ${this.Command}: error_num:${error.number} error_name:${error.name} error_msg:${error.message}`);
+
+        // Construct a string with the error information.
+        let errData = '';
+        if (_is.defined(this._error_data)) {
+            // Place the error data on its own line.
+            errData += '\n';
+        }
+        // Append the error data.
+        errData += `Error Encountered. err#${error.number} name:${error.name} msg:${error.message}\n`;
+
+        // Convert the string to a Buffer, to be compatible with the error data member.
+        const errBuf = _buffer.from(errData, 'utf-8');
+
+        // Append the buffer to the error data.
+        if (_is.undef(this._error_data)) {
+            // Initialize the result data
+            this._error_data = errBuf;
+        }
+        else {
+            // Otherwise, append the error message.
+            this._error_data += errBuf;
+        }
 
         // Ensure that the error is recorded.
         this._error_encountered = true;
