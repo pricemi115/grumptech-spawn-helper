@@ -98,8 +98,9 @@ describe('Instance tests', ()=>{
     });
     describe('Spawn Tests', ()=>{
         describe.each([
-            ['Success', {command: 'ls',  arguments: ['-al', '/Volumes'], options: new _SpawnOptions({cwd: __dirname}), token: 42},        42,        true],
-            ['Failure', {command: 'foo', arguments: ['-al', '/Volumes'], token: 'waffles'}, 'waffles', false],
+            ['Success', {command: 'ls',   arguments: ['-al', '/Volumes'], options: new _SpawnOptions({cwd: __dirname}), token: 42},        42,        true],
+            ['Success', {command: 'pwd',  arguments: ['-P'],              options: new _SpawnOptions({cwd: `~`}),       token: 42},        42,        false],
+            ['Failure', {command: 'foo',  arguments: ['-al', '/Volumes'],                                               token: 'waffles'}, 'waffles', false],
         ])('Functional operation', (desc, request, token, status)=>{
             test(desc, done =>{
                 function handlerComplete(response) {
@@ -114,12 +115,7 @@ describe('Instance tests', ()=>{
 
                         /* Result */
                         expect(response).toHaveProperty('result');
-                        if (status) {
-                            expect(response.result).toBeDefined();
-                        }
-                        else {
-                            expect(response.result).not.toBeDefined();
-                        }
+                        expect(response.result).toBeDefined();
 
                         /* Source */
                         expect(response).toHaveProperty('source');

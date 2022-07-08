@@ -39,7 +39,7 @@ export default [
             },
         },
         externals: [
-            'url', 'fs', 'path', 'child_process'
+            'url', 'fs', 'path', 'child_process', 'buffer',
         ],
         module: {
             parser: {
