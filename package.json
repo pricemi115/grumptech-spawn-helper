@@ -14,7 +14,7 @@
     "docs/"
   ],
   "scripts": {
-    "clean": "setopt localoptions rmstarsilent; rm -f ./dist/*; rm -f ./docs/*",
+    "clean": "setopt localoptions rmstarsilent; rm -rf ./dist/*; rm -rf ./docs/*",
     "prepare": "npm run docs; npm run docs-devnpm publish; npm run build",
     "build_dbg": "npx webpack --mode=development",
     "build": "npm run clean; npm run docs; npx webpack --mode=production",
