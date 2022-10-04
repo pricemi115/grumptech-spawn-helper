@@ -397,18 +397,8 @@ class SpawnHelper extends EventEmitter {
         // Convert the string to a Buffer, to be compatible with the error data member.
         const errBuf = _buffer.from(errData, 'utf-8');
 
-        // Append the buffer to the error data.
-        if (_is.undef(this._error_data)) {
-            // Initialize the result data
-            this._error_data = errBuf;
-        }
-        else {
-            // Otherwise, append the error message.
-            this._error_data += errBuf;
-        }
-
-        // Ensure that the error is recorded.
-        this._error_encountered = true;
+         // Append the buffer to the error data.
+         this._process_stderror_data(errBuf);
     }
 
     /**
