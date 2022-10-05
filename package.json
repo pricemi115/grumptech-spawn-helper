@@ -36,7 +36,8 @@
   "author": "GrumpTech (Michael J. Price)",
   "license": "ISC",
   "dependencies": {
-    "debug": "^4.3.4"
+    "debug": "^4.3.4",
+    "is-it-check": "^1.0.11"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
