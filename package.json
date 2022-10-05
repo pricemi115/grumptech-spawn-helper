@@ -1,7 +1,7 @@
 {
   "name": "grumptech-spawn-helper",
   "displatName": "GrumpTech Spawn Helper",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Wrapper for NodeJS child_process::spawn()",
   "type": "module",
   "main": "dist/grumptech-spawn-helper.js",
