@@ -7,6 +7,7 @@
 /* eslint-disable semi */
 /* eslint-disable new-cap */
 import {default as SpawnOptions, SPAWN_OPTIONS_SERIALIZATION_TYPES as SerializationTypes} from '../spawnOptions.mjs';
+import _is from 'is-it-check';
 
 describe('Module-level tests', ()=>{
     test('Module SpawnOptions export expected value', ()=>{
@@ -118,7 +119,7 @@ describe('Instance tests - Non-Defaults', ()=>{
         const sigAbortCtrlr = new AbortController();
         config = {cwd: 'waffles', env: {foo: 'bar'}, argv0: 'pancakes', stdio: 'stdio and syrup', detached: true,
                   uid: 3, gid: 4, serialization: 'foo bar', shell: 'she sold sea shells...', windowsVerbatimArguments: true,
-                  windowsHide: true, signal: sigAbortCtrlr.signal, timeout: 123, killSignal: 'snookie'};
+                  windowsHide: true, signal: sigAbortCtrlr.signal, timeout: 123, killSignal: 'snookie', testing: true};
         opts = new SpawnOptions(config);
     });
     describe('API & Default tests', ()=> {
@@ -151,7 +152,13 @@ describe('Instance tests - Non-Defaults', ()=>{
         });
         test('Serialization', ()=>{
             expect(opts).toHaveProperty('Serialization');
-            expect(opts.Serialization).toBe(config.serialization);
+            if (_is.truthy(Object.values(SerializationTypes).indexOf(config.serialization) >= 0)) {
+                expect(opts.Serialization).toBe(config.serialization);
+            }
+            else {
+                // Expect default.
+                expect(opts.Serialization).toBe(SerializationTypes.SERIALIZATION_JSON);
+            }
         });
         test('Shell', ()=>{
             expect(opts).toHaveProperty('Shell');
@@ -256,11 +263,24 @@ describe('Instance tests - Optional Settings', ()=>{
         expect(opts).toHaveProperty('GID');
         expect(opts.GID).toBe(config.gid);
     });
-    test('Serialization', ()=>{
-        const config = {serialization: 'foo bar'};
+    test('Serialization-Default', ()=>{
+        const config = {serialization: 'foo bar', testing: true};
         const opts = new SpawnOptions(config);
         expect(opts).toHaveProperty('Serialization');
-        expect(opts.Serialization).toBe(config.serialization);
+        // Expect default.
+        expect(opts.Serialization).toBe(SerializationTypes.SERIALIZATION_JSON);
+    });
+    test('Serialization-JSON', ()=>{
+        const config = {serialization: 'json', testing: false};
+        const opts = new SpawnOptions(config);
+        expect(opts).toHaveProperty('Serialization');
+        expect(opts.Serialization).toBe(SerializationTypes.SERIALIZATION_JSON);
+    });
+    test('Serialization-Advanced', ()=>{
+        const config = {serialization: 'advanced', testing: false};
+        const opts = new SpawnOptions(config);
+        expect(opts).toHaveProperty('Serialization');
+        expect(opts.Serialization).toBe(SerializationTypes.SERIALIZATION_ADVANCED);
     });
     test('Shell', ()=>{
         const config = {shell: 'she sold sea shells...'};

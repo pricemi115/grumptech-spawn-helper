@@ -4,6 +4,13 @@ Change history for _grumptech-spawn-helper_
 ---
 ---
 
+## [1.3.0] - 2022-10-05
+### Fixed
+- [Issue#5](https://github.com/pricemi115/grumptech-spawn-helper/issues/5): Consolidated common code.
+
+### Changes
+- Replaced dependency `is` with `is-it-check`. `is` module was effectively abandoned.
+
 ## [1.2.0] - 2022-07-09
 ### Fixed
 - Deploy a Typescript-frindly definition file for exports. Helps to keep modules like esLint happy.
