@@ -10,8 +10,8 @@
  * @see {@link https://nodejs.org/dist/latest-v16.x/docs/api/events.html#events}
  * @requires child_process
  * @see {@link https://nodejs.org/dist/latest-v16.x/docs/api/child_process.html}
- * @requires is
- * @see {@link https://github.com/enricomarino/is#readme}
+ * @requires is-it-check
+ * @see {@link https://github.com/evdama/is-it-check}
  */
 /* eslint-enable jsdoc/valid-types */
 
@@ -20,7 +20,7 @@ import EventEmitter from 'events';
 import _debugModule from 'debug';
 import {spawn as _spawn} from 'child_process';
 import { Buffer as _buffer} from 'buffer';
-import {default as _is} from 'is';
+import _is from 'is-it-check';
 
 // Internal imports.
 import {default as _SpawnOptions, SPAWN_OPTIONS_SERIALIZATION_TYPES as _SPAWN_OPTIONS_SERIALIZATION_TYPES} from './spawnOptions.mjs';
@@ -241,7 +241,7 @@ class SpawnHelper extends EventEmitter {
         }
 
         // Validate the arguments.
-        if (_is.undef(request) || !_is.object(request)) {
+        if (_is.undefined(request) || !_is.object(request)) {
             throw new TypeError('request must be an object');
         }
         // Validate 'required' command request.
@@ -276,7 +276,7 @@ class SpawnHelper extends EventEmitter {
         // Validate 'optional' options request
         let optsData = undefined;
         if (Object.prototype.hasOwnProperty.call(request, 'options')) {
-            if (!_is.instance(request.options, _SpawnOptions)) {
+            if (!(request.options instanceof _SpawnOptions)) {
                 throw new TypeError('request.options must be an instance of _SpawnOptions.');
             }
             else {
@@ -293,7 +293,7 @@ class SpawnHelper extends EventEmitter {
         // This object is a client-specified marker that can be used by the client when processing
         // results.
         if (Object.prototype.hasOwnProperty.call(request, 'token')) {
-            if (_is.undef(request.token)) {
+            if (_is.undefined(request.token)) {
                 throw new TypeError('request.token must be something if it is specified.');
             }
             // If we got this far, then request.info must be legit
@@ -333,7 +333,7 @@ class SpawnHelper extends EventEmitter {
      * @private
      */
     _process_stdout_data(chunk) {
-        if (_is.undef(this._result_data)) {
+        if (_is.undefined(this._result_data)) {
             // Initialize the result data
             this._result_data = chunk;
         }
@@ -350,7 +350,7 @@ class SpawnHelper extends EventEmitter {
      * @private
      */
     _process_stderror_data(chunk) {
-        if (_is.undef(this._error_data)) {
+        if (_is.undefined(this._error_data)) {
             // Initialize the result data
             this._error_data = chunk;
         }
@@ -387,7 +387,7 @@ class SpawnHelper extends EventEmitter {
 
         // Construct a string with the error information.
         let errData = '';
-        if (_is.defined(this._error_data)) {
+        if (_is.not.undefined(this._error_data)) {
             // Place the error data on its own line.
             errData += '\n';
         }

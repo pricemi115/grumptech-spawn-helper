@@ -6,14 +6,14 @@
  * @module SpawnOptionsModule
  * @requires debug
  * @see {@link https://github.com/debug-js/debug#readme}
- * @requires is
- * @see {@link https://github.com/enricomarino/is#readme}
+ * @requires is-it-check
+ * @see {@link https://github.com/evdama/is-it-check}
  */
 /* eslint-enable jsdoc/valid-types */
 
 // External dependencies and imports.
 import _debugModule from 'debug';
-import {default as _is} from 'is';
+import _is from 'is-it-check';
 
 /**
  * @description Debugging function pointer for runtime related diagnostics.
@@ -63,6 +63,7 @@ class SpawnOptions {
      * @param {AbortSignal} [config.signal] - allows aborting the child process using an AbortSignal.
      * @param {number} [config.timeout] - Timeout, in milliseconds the maximum amount of time the process is allowed to run.
      * @param {string | number} [config.killSignal] - The signal value to be used when the spawned process will be killed by timeout or abort signal.
+     * @param {boolean} [config.testing] = Flag indicating that this is a test and no exceptions should be thrown.
      * @throws {TypeError} - Thrown if any configuration data are specified.
      */
     constructor(config) {
@@ -91,14 +92,21 @@ class SpawnOptions {
         this._killSignal = 'SIGTERM';
 
         /* Validate and Process the configuration */
-        if (_is.defined(config)) {
+        if (_is.not.undefined(config)) {
             if (_is.object(config)) {
+                let testing = false;
+                if (Object.prototype.hasOwnProperty.call(config, 'testing')) {
+                    if (_is.boolean(config.testing)) {
+                        testing = config.testing;
+                    }
+                }
+
                 if (Object.prototype.hasOwnProperty.call(config, 'cwd')) {
                     /* Current Working Directory */
-                    if (_is.a(config.cwd, 'string') || _is.instance(config.cwd, URL)) {
+                    if (_is.sameType(config.cwd, 'string') || (config.cwd instanceof URL)) {
                         this._cwd = config.cwd;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.cwd' is not string or URL. type(${typeof(config.cwd)})`);
                     }
@@ -109,37 +117,37 @@ class SpawnOptions {
                         /* The specifics of the environment data provided are not interrogated. Caller beware */
                         this._env = config.env;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.env' is not an object. type(${typeof(config.env)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'argv0')) {
                     /* ArgV0 */
-                    if (_is.a(config.argv0, 'string')) {
+                    if (_is.sameType(config.argv0, 'string')) {
                         this._argv0 = config.argv0;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.argv0' is not string. type(${typeof(config.cwd)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'stdio')) {
                     /* StdIO configuration */
-                    if (_is.a(config.stdio, 'string') || _is.array(config.stdio)) {
+                    if (_is.sameType(config.stdio, 'string') || _is.array(config.stdio)) {
                         this._stdio = config.stdio;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.stdio' is not string or Array. type(${typeof(config.stdio)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'detached')) {
                     /* Detached */
-                    if (_is.bool(config.detached)) {
+                    if (_is.boolean(config.detached)) {
                         this._detached = config.detached;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.detached' is not a boolean. type(${typeof(config.detached)})`);
                     }
@@ -149,7 +157,7 @@ class SpawnOptions {
                     if (_is.number(config.uid)) {
                         this._uid = config.uid;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.uid' is not a number. type(${typeof(config.uid)})`);
                     }
@@ -159,59 +167,58 @@ class SpawnOptions {
                     if (_is.number(config.gid)) {
                         this._gid = config.gid;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.gid' is not a number. type(${typeof(config.gid)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'serialization')) {
                     /* Serialization */
-                    Object.values(SPAWN_OPTIONS_SERIALIZATION_TYPES).indexOf(config.serialization);
-                    if (_is.lt(Object.values(SPAWN_OPTIONS_SERIALIZATION_TYPES).indexOf(config.serialization), 0)) {
+                    if (_is.truthy(Object.values(SPAWN_OPTIONS_SERIALIZATION_TYPES).indexOf(config.serialization) >= 0)) {
                         this._serialization = config.serialization;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.serialization' is not a serialization type. type(${typeof(config.serialization)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'shell')) {
                     /* Shell */
-                    if (_is.bool(config.shell) || _is.a(config.shell, 'string')) {
+                    if (_is.boolean(config.shell) || _is.sameType(config.shell, 'string')) {
                         /* The specifics of the shell data provided, specifically when it is a string, are not interrogated. Caller beware */
                         this._shell = config.shell;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.shell' is neither a boolean nor a string. type(${typeof(config.shell)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'windowsVerbatimArguments')) {
                     /* Windows Verbatim Arguments */
-                    if (_is.bool(config.windowsVerbatimArguments)) {
+                    if (_is.boolean(config.windowsVerbatimArguments)) {
                         this._windowsVerbatimArgs = config.windowsVerbatimArguments;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.windowsVerbatimArguments' is not a boolean. type(${typeof(config.windowsVerbatimArguments)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'windowsHide')) {
                     /* Windows Hide */
-                    if (_is.bool(config.windowsHide)) {
+                    if (_is.boolean(config.windowsHide)) {
                         this._windowsHide = config.windowsHide;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.windowsHide' is not a boolean. type(${typeof(config.windowsHide)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'signal')) {
                     /* Abort Signal */
-                    if (_is.instance(config.signal, AbortSignal)) {
+                    if ((config.signal instanceof AbortSignal)) {
                         this._signal = config.signal;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.signal' is not an AbortSignal type. type(${typeof(config.signal)})`);
                     }
@@ -221,23 +228,23 @@ class SpawnOptions {
                     if (_is.number(config.timeout)) {
                         this._timeout = config.timeout;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.timeout' is not a number type(${typeof(config.timeout)})`);
                     }
                 }
                 if (Object.prototype.hasOwnProperty.call(config, 'killSignal')) {
                     /* Kill Signal */
-                    if (_is.a(config.killSignal, 'string') || _is.integer(config.killSignal)) {
+                    if (_is.sameType(config.killSignal, 'string') || _is.integer(config.killSignal)) {
                         this._killSignal = config.killSignal;
                     }
-                    else {
+                    else if (!testing) {
                         /* Incorrect type. */
                         throw new TypeError(`'config.killSignal' is neither a string nor integer type. type(${typeof(config.killSignal)})`);
                     }
                 }
             }
-            else {
+            else if (!testing) {
                 /* Incorrect type. */
                 throw new TypeError(`'config' is not an object. type(${typeof(config)})`);
             }
