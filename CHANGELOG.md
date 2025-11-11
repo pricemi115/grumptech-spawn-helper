@@ -3,7 +3,10 @@ Change history for _grumptech-spawn-helper_
 
 ---
 ---
-
+## [1.3.2] - 2025-NOV-09
+### What's new ✨
+- Updating dependencies
+---
 ## [1.3.1] - 2025-AUG-31
 ### What's new ✨
 - Updating dependencies

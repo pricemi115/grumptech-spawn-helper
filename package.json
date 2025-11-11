@@ -1,7 +1,7 @@
 {
   "name": "grumptech-spawn-helper",
   "displatName": "GrumpTech Spawn Helper",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Wrapper for NodeJS child_process::spawn()",
   "type": "module",
   "main": "dist/grumptech-spawn-helper.js",
@@ -28,7 +28,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pricemi115/grumptech-spawn-helper"
+    "url": "git+https://github.com/pricemi115/grumptech-spawn-helper.git"
   },
   "bugs": {
     "url": "https://github.com/pricemi115/grumptech-spawn-helper/issues"
@@ -36,21 +36,22 @@
   "author": "GrumpTech (Michael J. Price)",
   "license": "ISC",
   "dependencies": {
-    "debug": "^4.3.4",
+    "debug": "^4.4.3",
     "is-it-check": "^1.1.1"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^13.0.1",
     "docdash": "^2.0.2",
-    "eslint": "^9.34.0",
+    "eslint": "^9.39.1",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^54.1.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsdoc": "^54.7.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^7.2.1",
-    "jest": "^30.1.1",
-    "jsdoc": "^4.0.4",
-    "webpack": "^5.101.3",
+    "glob": "^11.0.3",
+    "jest": "^30.2.0",
+    "jsdoc": "^4.0.5",
+    "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1"
   }
 }
